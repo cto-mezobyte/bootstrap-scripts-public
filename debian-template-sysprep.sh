@@ -1,13 +1,38 @@
 # use caution when using -y (automatic "yes")
 sudo apt -y update
 sudo apt -y upgrade
-sudo apt-get install linux-tools-$(uname -r) -y
-sudo apt-get install linux-cloud-tools-$(uname -r) -y
+echo hv_vmbus >> /etc/initramfs-tools/modules
+echo hv_storvsc >> /etc/initramfs-tools/modules
+echo hv_blkvsc >> /etc/initramfs-tools/modules
+echo hv_netvsc >> /etc/initramfs-tools/modules
+sudo apt -y install hyperv-daemons
+sudo update-initramfs –u
 hv_fcopy_daemon
 hv_kvp_daemon
 hv_set_ifconfig
 hv_vss_daemon
 hv_get_dns_info
+wget http://www.pulseway.com/download/pulseway_x64.deb
+dpkg -i pulseway_x64.deb
+wget https://www.voipmonitor.org/current-stable-sniffer-static-64bit.tar.gz --content-disposition --no-check-certificate
+tar xzf voipmonitor-*-static.tar.gz
+cd voipmonitor-*-static
+./install-script.sh
+apt install python3
+apt install python3-dev
+apt install salt-minion
+apt install wazzuh
+apt install curl apt-transport-https lsb-release gnupg2
+curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | apt-key add -
+echo "deb https://packages.wazuh.com/3.x/apt/ stable main" | tee /etc/apt/sources.list.d/wazuh.list
+apt update && apt install wazuh-agemt
+apt update && apt install wazuh-agent
+apt install snmpd
+ping mezobyte.com
+apt install glusterfs-client
+apt install rclone
+iptables -A INPUT -s 169.239.84.14 -p tcp -m tcp --dport 161 -j ACCEPT
+netfilter-persistent save
 
 
 #Stop services for cleanup

@@ -1,0 +1,67 @@
+Panic Soft
+#NoFreeOnExit TRUE
+
+define ROOT     C:\Program Files (x86)\nxlog
+define CERTDIR  %ROOT%\cert
+define CONFDIR  %ROOT%\conf
+define LOGDIR   %ROOT%\data
+define LOGFILE  %LOGDIR%\nxlog.log
+LogFile %LOGFILE%
+LogLevel INFO
+
+Moduledir %ROOT%\modules
+CacheDir  %ROOT%\data
+Pidfile   %ROOT%\data\nxlog.pid
+SpoolDir  %ROOT%\data
+
+<Extension gelf>
+  Module xm_gelf
+</Extension>
+
+<Processor glog1-buffer>
+  Module pm_buffer
+  MaxSize 16384
+  Type Mem
+</Processor>
+
+<Extension logrotate>
+    Module  xm_fileop
+    <Schedule>
+        When    @daily
+        Exec    file_cycle('%ROOT%\data\nxlog.log', 7);
+     </Schedule>
+</Extension>
+
+
+<Input winel>
+    Module im_msvistalog
+    PollInterval 1
+    SavePos	True
+    ReadFromLast True
+    <QueryXML>
+        <QueryList>
+            <Query Id='0'>
+                <Select Path='Application'>*</Select>
+                <Select Path='Security'>*[System/Level&lt;4]</Select>
+                <Select Path='System'>*</Select>
+            </Query>
+        </QueryList>
+    </QueryXML>
+</Input>
+
+
+
+
+<Output glog1>
+    Module om_tcp
+    Host {gateway}
+    Port {port}
+    OutputType  GELF_TCP
+    Exec $short_message = $raw_event; # Avoids truncation of the short_message field.
+    Exec $Hostname = hostname_fqdn();
+</Output>
+
+
+<Route route-0>
+  Path winel => glog1-buffer => glog1
+</Route>

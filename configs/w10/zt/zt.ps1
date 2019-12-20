@@ -45,7 +45,7 @@ function new-ztnet {
     # Add each network from $network
     foreach($net in $network) {
         Write-Host "Joining ZT Network $net"
-        Start-Process zerotier-cli -Wait -ArgumentList "join $net" -Verb RunAs
+        Start-Process -FilePath '.\zt-join.bat' -Wait -ArgumentList "$net" -Verb RunAs
     }
 }
 

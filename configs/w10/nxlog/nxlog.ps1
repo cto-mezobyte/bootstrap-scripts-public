@@ -25,10 +25,10 @@ param (
     [Parameter(Mandatory)]
     [string]$gateway,
     # Manager IPs in a CSV format
-    [Parameter]
+    [Parameter()]
     [string]$port = '12201',
     # Gateway parameters
-    [Parameter]
+    [Parameter()]
     [string]$confdir = 'C:\Program Files (x86)\nxlog\conf'
 )
 

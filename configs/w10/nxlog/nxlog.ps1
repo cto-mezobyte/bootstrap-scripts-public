@@ -51,7 +51,7 @@ function new-config {
     Write-Host 'Generating NXLog Config'
     $base_file = '.\nxlog.conf.base'
     (Get-Content $base_file) | ForEach-Object {
-        $_ -replace '{hostname}', $gateway `
+        $_ -replace '{gateway}', $gateway `
         -replace '{port}', $port
      } | Set-Content "$confdir\nxlog.conf"
 }

@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Mezobyte Windows 10 Script to install nxlog
+    Mezobyte Windows 10 Script to install/configure nxlog
 .DESCRIPTION
-    Installs nxlog
+    Installs/Configures nxlog
 .EXAMPLE
     PS C:\> nxlog -gateway 192.168.194.254
     Installs NXLog and forwards all WELF Logs to 192.168.194.254 in a GELF format

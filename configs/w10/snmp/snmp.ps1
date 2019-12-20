@@ -1,5 +1,23 @@
-# Mezobyte Windows 10 SNMP Install Script
-# Installs and configures SNMP
+<#
+.SYNOPSIS
+    Mezobyte Windows 10 SNMP Install/Configure Script
+.DESCRIPTION
+    Installs and configures SNMP
+.EXAMPLE
+    PS C:\> snmp-w10.ps1 -community 'public' -managers '192.168.1.1, 192.168.1.2' 
+    Installs SNMP Role and allows 192.168.1.1 and 192.168.1.2 to poll this device with
+    community 'public'
+.INPUTS
+    -community
+    Specifies SNMP community
+    -managers
+    Specifies SNMP allowed managers
+.OUTPUTS
+    None
+.NOTES
+    Used by bootstrap script
+#>
+
 
 # Setup variables from install run parameters
 
@@ -10,10 +28,7 @@ param (
     [string]$community,
     # Manager IPs in a CSV format
     [Parameter(Mandatory)]
-    [string]$managers,
-    # Gateway parameters
-    [Parameter(Mandatory)]
-    [string]$gateway
+    [string]$managers
 )
 
 # Split entries in csv string in SNMP Managers
@@ -21,11 +36,7 @@ param (
 $managers = ($managers -split ',').replace(' ','')
 
 
-
-<#
- # Install SNMP Windows Service
- #>
-
+# Install SNMP Role
 
 Write-Host 'Installing SNMP Feature'
 Add-WindowsCapability  -Online -Name 'SNMP.Client~~~~0.0.1.0'
